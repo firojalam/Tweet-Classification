@@ -1,0 +1,20 @@
+# Read Me
+
+##### Prepare data
+
+
+cd /Users/firojalam/QCRI/aidr_classification/data
+
+awk 'BEGIN{FS="\t"}{print $1"\t"$3"\t"$4}' data/all_events_data_filtered_train.csv >data/all_events_data_train.csv
+awk 'BEGIN{FS="\t"}{print $1"\t"$3"\t"$4}' data/all_events_data_filtered_dev.csv >data/all_events_data_dev.csv
+awk 'BEGIN{FS="\t"}{print $1"\t"$3"\t"$4}' data/all_events_data_filtered_test.csv >data/all_events_data_test.csv
+
+
+THEANO_FLAGS=floatX=float32,device=gpu python bin/cnn_pipeline_aidr.py data/all_events_data_train.csv data/all_events_data_dev.csv data/all_events_data_test.csv results/all_events_data_result_cnn.txt
+
+THEANO_FLAGS=floatX=float32,device=gpu python bin/lstm_pipeline_aidr.py data/all_events_data_train.csv data/all_events_data_dev.csv data/all_events_data_test.csv results/all_events_data_result_lstm.txt
+
+
+
+from keras.models import load_model
+model = load_model('models/weights.best.hdf5')
